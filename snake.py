@@ -20,25 +20,44 @@ def playing_area():
 class Head(Turtle):
   def __init__(self, screen, body):
     super().__init__()
-    pass
+    self.alive = True
+    self.pu()
+    self.speed(0)
+    self.color("white")
+    self.shape("square")
+    self.setheading(90)
+    screen.onkey(self.up, "Up")
+    screen.onkey(self.down, "Down")
+    screen.onkey(self.left, "Left")
+    screen.onkey(self.right, "Right")
+
+    
 
   def up(self):
-    pass
+    if self.heading() != 270:
+      self.setheading(90)
 
   def down(self):
-    pass
+    if self.heading() != 90:
+      self.setheading(270)
+      
 
   def left(self):
-    pass
+    if self.heading() != 0:
+      self.setheading(180)
+      
 
   def right(self):
-    pass
+    if self.heading() != 180:
+      self.setheading(0)
 
   def move(self):
-    pass
+    self.forward(1)
+    if self.xcor()>240 or self.xcor()<-240 or self.ycor()>240 or self.ycor()<-240:
+      self.die()
     
   def die(self):
-    pass
+    self.ht()
 
 
 class Segment(Turtle):
@@ -52,10 +71,13 @@ class Segment(Turtle):
 class Apple(Turtle):
   def __init__(self):
     super().__init__()
-    pass
+    self.speed(0)
+    self.shape("circle")
+    self.color("red")
+    self.pu()
 
   def relocate(self):
-    pass
+    self.goto(random.randint(-220, 220), random.randint(-220, 220))
 
 screen = Screen()
 screen.bgcolor("black")
@@ -65,11 +87,16 @@ screen.listen()
 
 body = []
 
+playing_area()
+apple = Apple()
+apple.relocate()
 
-screen.exitonclick()
+player = Head(screen, body)
 
-
-
+while True:
+  player.move()
+  if player.distance(apple) < 20:
+    apple.relocate()
 
 
 
