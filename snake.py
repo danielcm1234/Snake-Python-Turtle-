@@ -51,19 +51,24 @@ class Head(Turtle):
     if self.heading() != 180:
       self.setheading(0)
 
-  def move(self):
-    self.forward(1)
+  def move(self, body):
+    self.forward(2)
     if self.xcor()>240 or self.xcor()<-240 or self.ycor()>240 or self.ycor()<-240:
-      self.die()
+      self.die(body)
     
-  def die(self):
+  def die(self, body):
     self.ht()
-
+    for i in body:
+      i.ht()
 
 class Segment(Turtle):
   def __init__(self, other):
     super().__init__()
-    pass
+    self.shape("square")
+    self.color("white")
+    self.speed(0)
+    self.pu()
+    self.goto(other[-1].xcor(), other[-1].ycor())
 
   def move(self, other):
     pass
@@ -92,11 +97,20 @@ apple = Apple()
 apple.relocate()
 
 player = Head(screen, body)
+body.append(player)
+body.append(Segment(body))
 
 while True:
-  player.move()
   if player.distance(apple) < 20:
     apple.relocate()
+    body.append(Segment(body))
+  for i in range(len(body)-1, 0, -1):
+    body[i].goto(body[i-1].xcor(), body[i-1].ycor())
+    player.move(body)
+  for segment in body[3:]:
+    if player.distance(segment) < 20:
+      player.die(body)
+
 
 
 
