@@ -52,7 +52,7 @@ class Head(Turtle):
       self.setheading(0)
 
   def move(self, body):
-    self.forward(2)
+    self.forward(20)
     if self.xcor()>240 or self.xcor()<-240 or self.ycor()>240 or self.ycor()<-240:
       self.die(body)
     
@@ -84,11 +84,24 @@ class Apple(Turtle):
   def relocate(self):
     self.goto(random.randint(-220, 220), random.randint(-220, 220))
 
+def update():
+  if player.distance(apple) < 20:
+    apple.relocate()
+    body.append(Segment(body))
+  for i in range(len(body)-1, 0, -1):
+    body[i].goto(body[i-1].xcor(), body[i-1].ycor())
+    player.move(body)
+  for segment in body[3:]:
+    if player.distance(segment) < 20:
+      player.die(body)
+  screen.ontimer(update, 100)
+
 screen = Screen()
 screen.bgcolor("black")
 screen.setup(520,520)
 # Key Binding. Connects key presses and mouse clicks with function calls
 screen.listen()
+screen.onkeypress(update, "space")
 
 body = []
 
@@ -99,19 +112,5 @@ apple.relocate()
 player = Head(screen, body)
 body.append(player)
 body.append(Segment(body))
-
-while True:
-  if player.distance(apple) < 20:
-    apple.relocate()
-    body.append(Segment(body))
-  for i in range(len(body)-1, 0, -1):
-    body[i].goto(body[i-1].xcor(), body[i-1].ycor())
-    player.move(body)
-  for segment in body[3:]:
-    if player.distance(segment) < 20:
-      player.die(body)
-
-
-
 
 screen.exitonclick()
