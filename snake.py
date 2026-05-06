@@ -68,10 +68,10 @@ class Segment(Turtle):
     self.color("white")
     self.speed(0)
     self.pu()
+    
+  def move(self, other):
     self.goto(other[-1].xcor(), other[-1].ycor())
 
-  def move(self, other):
-    pass
 
 class Apple(Turtle):
   def __init__(self):
@@ -90,11 +90,11 @@ def update():
     body.append(Segment(body))
   for i in range(len(body)-1, 0, -1):
     body[i].goto(body[i-1].xcor(), body[i-1].ycor())
-    player.move(body)
+  player.move(body)
   for segment in body[3:]:
     if player.distance(segment) < 20:
       player.die(body)
-  screen.ontimer(update, 100)
+  screen.ontimer(update, 120)
 
 screen = Screen()
 screen.bgcolor("black")
